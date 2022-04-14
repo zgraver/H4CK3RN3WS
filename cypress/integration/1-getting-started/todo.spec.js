@@ -18,6 +18,8 @@ The basic app should
 */
 
 describe("example news app", () => {
+  let firstArticle;
+
   beforeEach(() => {
     cy.visit("http://localhost:3000/hackernews");
   });
@@ -26,12 +28,22 @@ describe("example news app", () => {
     cy.request("https://hn.algolia.com/api/v1/search").should((response) => {
       expect(response.status).to.eq(200);
       expect(response.body?.hits.length).to.be.gt(0);
+      firstArticle = response.body?.hits[0];
     });
   });
 
   it("displays articles", () => {
-    cy.get(".news-list li").should("have.length.above", 0);
-    cy.get(".news-list li").should("have.length", 20);
+    cy.get(".news-item")
+      .should("have.length.above", 0)
+      .should("have.length", 20)
+      .first()
+      .should("have.text", firstArticle?.title)
+      .should("be.visible");
+  });
+
+  it("loads article on click", () => {
+    cy.get(".news-item").first().click();
+    cy.location("pathname").should("include", firstArticle?.objectID);
   });
 
   // it("can add new todo items", () => {

@@ -10,8 +10,10 @@ const HackerNewsPage: NextPage = ({ news }) => {
       </Head>
       <div className="news-list">
         {news?.hits?.map(({ title, url, author, num_comments }) => (
-          <li>
-            <title>{title}</title>
+          <li className="news-item">
+            <a className="news-title" href="https://github.com/">
+              {title}
+            </a>
           </li>
         ))}
       </div>
