@@ -31,6 +31,7 @@ describe("example news app", () => {
 
   it("displays articles", () => {
     cy.get(".news-list li").should("have.length.above", 0);
+    cy.get(".news-list li").should("have.length", 20);
   });
 
   // it("can add new todo items", () => {
