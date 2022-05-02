@@ -1,0 +1,54 @@
+.container {
+  margin: 10px;
+  width: 420px;
+  max-width: 50%;
+}
+
+.inputs {
+    display: inline-flex;
+}
+
+.inputs > button {
+    margin-left: 10px;
+}
+
+.newsList {
+}
+
+.newsItem {
+  list-style: none;
+  padding: 8px;
+  border-bottom: 1px solid #000;
+}
+
+.title {
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.index {
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+.link {
+}
+
+.link:hover {
+  color: blue;
+  text-decoration: underline;
+}
+
+.subTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.subTitle > .author {
+}
+
+.subTitle > .numComments {
+}

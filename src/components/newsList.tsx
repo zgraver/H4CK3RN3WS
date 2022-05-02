@@ -1,12 +1,10 @@
 import useSWR from "swr";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import styles from "../styles/NewsList.module.css";
 
 const fetcher = (url, query = "", page = 0) =>
   fetch(`${url}?query=${query}&page=${page}`).then((res) => res.json());
-
-// Has a search input field to query articles on the server using the "query" parameter
-// A button to load more articles and append these at the bottom of the table.
 
 const NewsList = ({ hidden = false }) => {
   const [query, setQuery] = useState("");
@@ -30,33 +28,46 @@ const NewsList = ({ hidden = false }) => {
     );
   }, [data]);
   return (
-    <div className={hidden ? "hidden" : ""}>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          setAggregateData([]);
-          setQuery(search);
-          setPage(0);
-        }}
-      >
-        <input
-          type="text"
-          value={search}
-          placeholder="Search"
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <button type="submit">Search</button>
-      </form>
-      <button type="button" onClick={(e) => setPage(page + 1)}>
-        Load More
-      </button>
-      <div className={`news-list`}>
+    <div className={`${styles.container} ${hidden ? "hidden" : ""}`}>
+      <div className={styles.inputs}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setAggregateData([]);
+            setQuery(search);
+            setPage(0);
+          }}
+        >
+          <input
+            type="text"
+            value={search}
+            placeholder="Search"
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button type="submit">Search</button>
+        </form>
+        <button type="button" onClick={(e) => setPage(page + 1)}>
+          Load More
+        </button>
+      </div>
+      <div className={styles.newsList}>
         {aggregateData.map(
-          ({ objectID: id, title, url, author, num_comments }) => (
-            <li className="news-item">
-              <Link className="news-title" href={`/hackernews/${id}`}>
-                <a>{title}</a>
+          ({ objectID: id, title, url, author, num_comments }, index) => (
+            <li className={styles.newsItem}>
+              <Link href={`/hackernews/${id}`}>
+                <a className={styles.link}>
+                  <div className={styles.index}>{index}</div>
+                  {title}
+                </a>
               </Link>
+              <div className={styles.subTitle}>
+                <div className={styles.author}>author: {author}</div>
+                <div className={styles.numComments}>
+                  <Link href={`/hackernews/${id}`}>
+                    <a className={styles.link}>{num_comments} comments</a>
+                  </Link>
+                </div>
+              </div>
             </li>
           )
         )}
