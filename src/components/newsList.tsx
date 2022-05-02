@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import Link from "next/link";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -9,11 +10,11 @@ const NewsList = ({ hidden = false }) => {
   );
   return (
     <div className={`news-list ${hidden ? "hidden" : ""}`}>
-      {data?.hits?.map(({ title, url, author, num_comments }) => (
+      {data?.hits?.map(({ objectID: id, title, url, author, num_comments }) => (
         <li className="news-item">
-          <a className="news-title" href={url}>
-            {title}
-          </a>
+          <Link className="news-title" href={`/hackernews/${id}`}>
+            <a>{title}</a>
+          </Link>
         </li>
       ))}
     </div>
