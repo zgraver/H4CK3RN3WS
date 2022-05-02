@@ -2,19 +2,26 @@ import useSWR from "swr";
 import Link from "next/link";
 import { useState } from "react";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
+const fetcher = (url, queryParams = "") =>
+  fetch(`${url}?query=${queryParams}`).then((res) => res.json());
 
 // Has a search input field to query articles on the server using the "query" parameter
 
 const NewsList = ({ hidden = false }) => {
+  const [search, setSearch] = useState("");
+  const [queryParams, setQueryParams] = useState("");
   const { data, error } = useSWR(
-    "https://hn.algolia.com/api/v1/search",
+    ["https://hn.algolia.com/api/v1/search", queryParams],
     fetcher
   );
-  const [search, setSearch] = useState("");
   return (
-    <>
-      <form onSubmit={(e) => e.preventDefault()}>
+    <div className={hidden ? "hidden" : ""}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setQueryParams(search);
+        }}
+      >
         <input
           type="text"
           value={search}
@@ -23,7 +30,7 @@ const NewsList = ({ hidden = false }) => {
         />
         <button type="submit">Search</button>
       </form>
-      <div className={`news-list ${hidden ? "hidden" : ""}`}>
+      <div className={`news-list`}>
         {data?.hits?.map(
           ({ objectID: id, title, url, author, num_comments }) => (
             <li className="news-item">
@@ -34,7 +41,7 @@ const NewsList = ({ hidden = false }) => {
           )
         )}
       </div>
-    </>
+    </div>
   );
 };
 
