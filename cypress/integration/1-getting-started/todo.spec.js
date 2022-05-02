@@ -41,9 +41,16 @@ describe("example news app", () => {
       .should("be.visible");
   });
 
-  it("loads article on click", () => {
+  it("has a link to the source", () => {
+    cy.get(".news-item a")
+      .first()
+      .should("have.attr", "href", firstArticle?.url);
+  });
+
+  it("shows drilldown details on click", () => {
+    cy.get(".news-item .details").should("not.exist");
     cy.get(".news-item").first().click();
-    cy.location("pathname").should("include", firstArticle?.objectID);
+    cy.get(".news-item .details").should("exist");
   });
 
   // it("can add new todo items", () => {

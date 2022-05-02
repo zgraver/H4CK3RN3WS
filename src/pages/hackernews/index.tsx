@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import NewsList from "../../components/newsList";
+import Layout from "../../components/Layout";
 
 const HackerNewsPage: NextPage = () => {
   return (
@@ -9,7 +9,7 @@ const HackerNewsPage: NextPage = () => {
         <title>H4CK3RN3WS</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NewsList />
+      <Layout>{}</Layout>
     </div>
   );
 };
