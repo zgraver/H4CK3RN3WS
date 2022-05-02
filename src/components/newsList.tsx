@@ -1,25 +1,42 @@
 import useSWR from "swr";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const fetcher = (url, queryParams = "") =>
-  fetch(`${url}?query=${queryParams}`).then((res) => res.json());
+const fetcher = (url, query = "", page = 0) =>
+  fetch(`${url}?query=${query}&page=${page}`).then((res) => res.json());
 
 // Has a search input field to query articles on the server using the "query" parameter
+// A button to load more articles and append these at the bottom of the table.
 
 const NewsList = ({ hidden = false }) => {
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
-  const [queryParams, setQueryParams] = useState("");
+  const [aggregateData, setAggregateData] = useState([]);
   const { data, error } = useSWR(
-    ["https://hn.algolia.com/api/v1/search", queryParams],
+    ["https://hn.algolia.com/api/v1/search", query, page],
     fetcher
   );
+  useEffect(() => {
+    setAggregateData(
+      aggregateData
+        .concat(data?.hits ?? [])
+        .filter(
+          (article) =>
+            article.title !== null &&
+            article.title !== "" &&
+            article.title !== undefined
+        )
+    );
+  }, [data]);
   return (
     <div className={hidden ? "hidden" : ""}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          setQueryParams(search);
+          setAggregateData([]);
+          setQuery(search);
+          setPage(0);
         }}
       >
         <input
@@ -30,8 +47,11 @@ const NewsList = ({ hidden = false }) => {
         />
         <button type="submit">Search</button>
       </form>
+      <button type="button" onClick={(e) => setPage(page + 1)}>
+        Load More
+      </button>
       <div className={`news-list`}>
-        {data?.hits?.map(
+        {aggregateData.map(
           ({ objectID: id, title, url, author, num_comments }) => (
             <li className="news-item">
               <Link className="news-title" href={`/hackernews/${id}`}>
