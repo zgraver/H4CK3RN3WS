@@ -1,16 +1,16 @@
 import { Size, useWindowSize } from "../app/hooks";
+import NewsList from "../components/newsList";
 export default function Layout({ children }) {
   const size: Size = useWindowSize();
   const isSmall = size.width < 641;
 
   return isSmall ? (
     <>
-      small
       <main>{children}</main>
     </>
   ) : (
     <>
-      large
+      <NewsList />
       <main>{children}</main>
     </>
   );
