@@ -62,13 +62,18 @@ const NewsList = ({ hidden = false }) => {
               </Link>
               <div className={styles.subTitle}>
                 <div>author: {author}</div>
-                <a href={url} target="_blank" rel="noopener">
-                  link
-                </a>
                 <div>
                   <Link href={`/hackernews/${id}`}>
                     <a className={styles.link}>{num_comments} comments</a>
                   </Link>
+                  <a
+                    style={{ marginLeft: "40px" }}
+                    href={url}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    source
+                  </a>
                 </div>
               </div>
             </li>
