@@ -1,7 +1,21 @@
+import Head from "next/head";
+import { useRouter } from "next/router";
 import Layout from "../../components/layout";
 
 export default function Details({ details }) {
-  return <Layout>{details.id}</Layout>;
+  const router = useRouter();
+  const { id } = router.query;
+  return (
+    <>
+      <Head>
+        <title>{details.title ?? id}</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Layout>
+        <pre>{JSON.stringify(details, null, 2)}</pre>
+      </Layout>
+    </>
+  );
 }
 
 export async function getServerSideProps(context) {
